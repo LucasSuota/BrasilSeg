@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
-import "./globals.css";
+import "@/app/globals.css";
 
 const lexend = Lexend({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BrasilSeg: Dashboard",
+  title: "BrasilSeg: Login",
 };
 
 export default function RootLayout({
@@ -14,8 +14,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={lexend.className}>{children}</body>
-    </html>
+      <div className={lexend.className}>{children}</div>
   );
 }
