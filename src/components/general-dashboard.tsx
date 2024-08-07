@@ -1,7 +1,7 @@
+import Dashboard from "./dashboard/Dashboard";
+
 export function GeneralDashboard(){
     return(
-        <div>
-            General Dashboard
-        </div>
+        <Dashboard/>
     )
 }
