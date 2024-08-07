@@ -5,7 +5,6 @@ import { CompleteTable } from "../Table/CompleteTable";
 import { columns } from "../Table/CompleteTableColumns";
 import { generalContext } from "@/context/generalContext";
 
-
 const SpreadSheet = () => {
   const generalContextData = useContext(generalContext);
 

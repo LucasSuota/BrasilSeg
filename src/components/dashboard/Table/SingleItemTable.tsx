@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import {
   Table as MainTable,
   TableBody,
@@ -10,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { siglasEstadosBrasil } from "@/constants";
 
 import { Load, LoadInputs } from "@/types/types";
@@ -26,16 +28,19 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+
 import { Check, ChevronsUpDown } from "lucide-react";
 import { CommandList } from "cmdk";
 import { cn } from "@/lib/utils";
 import { globalClientsContext } from "@/context/clientsContext";
-import { globalLoadsContext } from "@/context/loadsContext";
+import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 const tableRows = [
   "Data",
@@ -55,17 +60,23 @@ const SingleItemTable = ({ loads }: { loads: Load }) => {
 
   const clientsContext = useContext(globalClientsContext);
   const [clientValue, setClientValue] = useState("");
-  const context = useContext(globalLoadsContext);
   const [open, setOpen] = useState(false);
 
   const action: () => void = handleSubmit(async (data) => {
     try {
-      const getClientId = clientsContext.clients.find(
-        (client) => client.name === data.clientId
-      )?.id;
+      const clientName = clientsContext.clients.find(
+        (client) => client.name === clientValue
+      );
 
-      if (getClientId !== undefined) {
-        const load = {
+      const currentDocRef = doc(db, "payloads", data.cte);
+      const currentDocSnap = await getDoc(currentDocRef);
+
+      if (currentDocSnap.exists() && data.cte !== loads.cte) {
+        toast.error("CT-e já cadastrada!", {
+          position: "top-center",
+        });
+      } else {
+        await setDoc(currentDocRef, {
           date: data.date,
           cte: data.cte,
           truckPlate: data.truckPlate,
@@ -76,20 +87,17 @@ const SingleItemTable = ({ loads }: { loads: Load }) => {
           insuranceAmount: getInsuranceAmount(),
           invoiceAmount: data.invoiceAmount,
           taxAmount: data.taxAmount,
-          clientId: String(getClientId),
-        };
-
-        
-
-        await context.fetchLoads();
-
-        toast.success("Sucesso ao atualizar carga", {
-          position: "top-center",
-        });
-      } else {
-        toast.warning("Verifique todos os campos", {
-          position: "top-center",
-        });
+          clientId: clientName?.name,
+        })
+          .then(async () => {
+            const oldDocRef = doc(db, "payloads", loads.cte);
+            await deleteDoc(oldDocRef);
+          })
+          .finally(() => {
+            toast.success("Sucesso ao atualizar carga", {
+              position: "top-center",
+            });
+          });
       }
     } catch (error) {
       console.error(error);

@@ -15,7 +15,7 @@ const AddNewLoad = () => {
     <Dialog>
       <DialogTrigger>
         <DialogHeader>
-          <span className="flex px-4 border rounded-md items-center justify-start text-left font-normal text-muted-foreground ms-4 hover:bg-green-100 h-10">
+          <span className="flex px-4 border items-center justify-start text-left font-normal text-muted-foreground ms-4 hover:bg-green-100 h-10">
             <Truck className="mr-2 h-4 w-4" />
             <span>Adicionar Carga</span>
           </span>

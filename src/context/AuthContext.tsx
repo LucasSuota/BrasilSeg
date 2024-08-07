@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { LoadingPage } from "@/components/loading-page";
 import { auth } from "@/firebase";

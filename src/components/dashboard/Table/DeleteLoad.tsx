@@ -12,8 +12,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { globalLoadsContext } from "@/context/loadsContext";
+import { db } from "@/firebase";
 
 import { Load } from "@/types/types";
+import { deleteDoc, doc } from "firebase/firestore";
 import { useContext } from "react";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -25,7 +27,6 @@ const DeleteLoad = ({ load }: { load: Load }) => {
 
   const handleDeleteLoad = async () => {
     try {
-
       toast.success("Carga excluída com sucesso", {
         position: "top-center",
       });

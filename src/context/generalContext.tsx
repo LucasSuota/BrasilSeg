@@ -21,17 +21,12 @@ const GeneralContext = ({ children }: { children: React.ReactNode }) => {
   const [updatedLoads, setUpdatedLoads] = useState<Load[]>([]);
 
   useEffect(() => {
-    const getFilteredLoads = async () => {
-      const convertedLoads = convertIdIntoClient(clients.clients, loads.loads);
-      const filteredData = filterLoadData(
-        dateContext.date!,
-        convertedLoads as Load[]
-      );
-
-      if (filteredData) setUpdatedLoads(filteredData as Load[]);
+    const aggregatedData = async () => {
+      const convertedLoads = filterLoadData(dateContext.date!, loads.loads);
+      if (convertedLoads) setUpdatedLoads(convertedLoads as Load[]);
     };
 
-    getFilteredLoads();
+    aggregatedData();
   }, [dateContext.date, loads.loads, clients.clients]);
 
   return (

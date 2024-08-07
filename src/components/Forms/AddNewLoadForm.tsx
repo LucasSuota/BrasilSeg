@@ -27,24 +27,16 @@ import { CommandList } from "cmdk";
 
 import { LoadInputs } from "@/types/types";
 import { globalClientsContext } from "@/context/clientsContext";
-import { globalLoadsContext } from "@/context/loadsContext";
-import { doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 
 const AddNewLoadForm = () => {
   const { register, handleSubmit, watch, setValue } = useForm<LoadInputs>();
 
   const clientsContext = useContext(globalClientsContext);
-  const context = useContext(globalLoadsContext);
 
   const [clientValue, setClientValue] = useState("");
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const handleGetClients = async () => {};
-
-    handleGetClients();
-  }, []);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -53,7 +45,9 @@ const AddNewLoadForm = () => {
           (client) => client.name === clientValue
         );
 
-        await setDoc(doc(db, "payloads", data.cte), {
+        const newDocRef = doc(db, "payloads", `${data.cte}`);
+
+        await setDoc(newDocRef, {
           date: data.date,
           cte: data.cte,
           truckPlate: data.truckPlate,

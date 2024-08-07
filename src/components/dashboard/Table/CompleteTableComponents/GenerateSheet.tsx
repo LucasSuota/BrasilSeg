@@ -4,7 +4,7 @@ type Input = {
   title: string;
 };
 
-import { Button } from "@/components/ui/button";;
+import { Button } from "@/components/ui/button";
 import { FileSpreadsheet } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
@@ -57,7 +57,7 @@ const GenerateSheet = () => {
   };
 
   return (
-    <span className="flex px-2 border rounded-md justify-start text-left font-normal text-muted-foreground ms-4 hover:bg-green-100">
+    <span className="flex px-2 border justify-start text-left font-normal text-muted-foreground ms-4 hover:bg-green-100">
       <Dialog>
         <DialogTrigger>
           <div className="flex items-center justify-center">
