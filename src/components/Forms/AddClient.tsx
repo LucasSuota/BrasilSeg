@@ -13,23 +13,14 @@ import { Button } from "@/components/ui/button";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { Client } from "@/types/types";
 import { db } from "@/firebase";
+import { createClient } from "@/services/firebaseFunction";
 
 const AddClient = () => {
   const { register, handleSubmit } = useForm<Client>();
 
   const action: () => void = handleSubmit(async (data) => {
     try {
-      await setDoc(doc(db, "clients", data.name), {
-        name: data.name,
-        address: data.address,
-        county: data.county,
-        cnpjcpf: data.cnpjcpf,
-        state: data.state,
-        country: data.country,
-        zip: data.zip,
-        ie: data.ie,
-        telephone: data.telephone,
-      });
+      createClient(data.cnpjcpf, data);
 
       toast.success("Cliente adicionado com sucesso", {
         position: "top-center",

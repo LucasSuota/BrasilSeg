@@ -4,21 +4,20 @@ import GeneralContext from "@/context/generalContext";
 import LoadsContext from "@/context/loadsContext";
 import MenuControl from "./MenuControl/MenuControl";
 
-export function Dashboard(){
-
+export function Dashboard() {
   return (
     <section className="w-full h-dvh flex flex-col items-center justify-center">
       <DateContext>
-        <LoadsContext>
-          <ClientesContext>
+        <ClientesContext>
+          <LoadsContext>
             <GeneralContext>
               <MenuControl />
             </GeneralContext>
-          </ClientesContext>
-        </LoadsContext>
+          </LoadsContext>
+        </ClientesContext>
       </DateContext>
     </section>
   );
-};
+}
 
 export default Dashboard;

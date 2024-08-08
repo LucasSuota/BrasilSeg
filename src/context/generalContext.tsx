@@ -7,6 +7,7 @@ import { filterLoadData } from "@/utils/filterLoadData";
 import { Load } from "@/types/types";
 import { globalClientsContext } from "./clientsContext";
 import { convertIdIntoClient } from "@/utils/convertIdIntoClient";
+import { getPayloads } from "@/services/firebaseFunction";
 
 export const generalContext = createContext<{
   updatedLoads: Load[];
@@ -21,12 +22,17 @@ const GeneralContext = ({ children }: { children: React.ReactNode }) => {
   const [updatedLoads, setUpdatedLoads] = useState<Load[]>([]);
 
   useEffect(() => {
-    const aggregatedData = async () => {
-      const convertedLoads = filterLoadData(dateContext.date!, loads.loads);
-      if (convertedLoads) setUpdatedLoads(convertedLoads as Load[]);
+    const fetchLoads = async () => {
+      let allLoads: Load[] = [];
+      for (const client of clients.clients) {
+        const payload = await getPayloads(client.cnpjcpf);
+        allLoads = [...allLoads, ...payload];
+      }
+      console.log(allLoads);
+      setUpdatedLoads(allLoads);
     };
 
-    aggregatedData();
+    fetchLoads();
   }, [dateContext.date, loads.loads, clients.clients]);
 
   return (

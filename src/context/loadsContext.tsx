@@ -1,9 +1,9 @@
 "use client";
 
-import { db } from "@/firebase";
-import { Load, LoadInputs } from "@/types/types";
-import { collection, getDocs, query } from "firebase/firestore";
-import { createContext, useEffect, useState } from "react";
+import { Load } from "@/types/types";
+import { createContext, useContext, useEffect, useState } from "react";
+import { globalClientsContext } from "./clientsContext";
+import { getPayloads } from "@/services/firebaseFunction";
 
 export const globalLoadsContext = createContext<{
   loads: Load[];
@@ -14,15 +14,17 @@ export const globalLoadsContext = createContext<{
 const LoadsContext = ({ children }: { children: React.ReactNode }) => {
   const [loads, setLoads] = useState<Load[]>([]);
 
+  const clients = useContext(globalClientsContext);
+
   const fetchLoads = async () => {
     try {
-      const q = query(collection(db, "payloads"));
-      const querySnapshot = await getDocs(q);
-      const newLoads: Load[] = [];
-      querySnapshot.forEach((doc) => {
-        newLoads.push(doc.data() as Load);
+      let allLoads: Load[] = [];
+      clients.clients.forEach(async (client) => {
+        const payload = await getPayloads(client.cnpjcpf);
+        allLoads = [...allLoads, ...payload];
       });
-      setLoads(newLoads);
+
+      console.log(allLoads);
     } catch (error) {
       console.error(error);
     }

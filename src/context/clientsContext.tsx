@@ -25,6 +25,10 @@ const ClientesContext = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error(error);
     }
+    try {
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {

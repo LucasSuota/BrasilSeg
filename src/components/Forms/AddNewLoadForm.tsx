@@ -25,10 +25,11 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CommandList } from "cmdk";
 
-import { LoadInputs } from "@/types/types";
+import { Load, LoadInputs } from "@/types/types";
 import { globalClientsContext } from "@/context/clientsContext";
 import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
+import { addPayload } from "@/services/firebaseFunction";
 
 const AddNewLoadForm = () => {
   const { register, handleSubmit, watch, setValue } = useForm<LoadInputs>();
@@ -45,9 +46,7 @@ const AddNewLoadForm = () => {
           (client) => client.name === clientValue
         );
 
-        const newDocRef = doc(db, "payloads", `${data.cte}`);
-
-        await setDoc(newDocRef, {
+        const formattedData = {
           date: data.date,
           cte: data.cte,
           truckPlate: data.truckPlate,
@@ -59,11 +58,15 @@ const AddNewLoadForm = () => {
           invoiceAmount: data.invoiceAmount,
           taxAmount: data.taxAmount,
           clientId: selectedClient?.name,
+        };
+
+        if (selectedClient)
+          addPayload(selectedClient?.cnpjcpf, data.cte, formattedData as Load);
+
+        toast.success("Carga adicionada com sucesso", {
+          position: "top-center",
         });
       }
-      toast.success("Carga adicionada com sucesso", {
-        position: "top-center",
-      });
     } catch (error) {
       console.error(error);
       toast.warning("Verifique os dados", {

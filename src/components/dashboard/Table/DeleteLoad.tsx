@@ -23,15 +23,13 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const DeleteLoad = ({ load }: { load: Load }) => {
-  const context = useContext(globalLoadsContext);
-
   const handleDeleteLoad = async () => {
     try {
+      await deleteDoc(doc(db, "payloads", load.cte));
+
       toast.success("Carga excluída com sucesso", {
         position: "top-center",
       });
-
-      await context.fetchLoads();
     } catch (error) {
       toast.error("Erro ao excluir carga", {
         position: "top-center",
